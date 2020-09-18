@@ -5,96 +5,69 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        /* Задание 3.1
-        На основе массива из домашнего задания 2.1 реализуйте простой список и коллекцию.
-        Оцените время выполнения преобразования.
+        long startTime;
+        long endTime;
+        /*
+        Задание 4.1
+        На основе данных объектного списка из задания 3.4 реализуйте простой стек и его базовые методы.
+        Оцените время выполнения операций с помощью базового метода System.nanoTime().
         */
-        final int ARR_LENGTH = 500;
-        int[] simpleTypeArray = new int[ARR_LENGTH];
-        int[] copyOfSimpleTypeArray = null;
-        fillArray(simpleTypeArray);
+        SimpleStack simpleStack = new SimpleStack(10);
 
-        long timeStart = System.nanoTime();
-        ArrayList<Integer> arrList = new ArrayList<>(500);
-        for (int i = 0; i < simpleTypeArray.length; i++) {
-            arrList.add(simpleTypeArray[i]);
-        }
-        long timeStop = System.nanoTime();
-        System.out.println("Время заполнения ArrayList'a " + (timeStop - timeStart) + " наносекунд.");
-        Collections.sort(arrList);
-        System.out.println(arrList);
+        startTime = System.nanoTime();
+        simpleStack.addElement(new MyClass("Bob"));
+        endTime = System.nanoTime();
+        simpleStack.addElement(new MyClass("Alice"));
+
+        System.out.println("Время на добавление элемента в стек: " + (endTime - startTime));
+
+        System.out.println(simpleStack.pollElement().toString());
 
         /*
-        Задание 3.2
-        На основе списка из задания 3.1 реализуйте основные методы добавления, удаления и получения объекта
-        или элемента из списка.
-        Оценить выполненные методы с помощью базового класса System.nanoTime().
+        Задание 4.2
+        На основе данных объектного списка из задания 3.4 реализуйте простую очередь и его базовые методы.
+        Реализуйте вспомогательные методы.
+        Оцените время выполнения операций с помощью базового метода System.nanoTime().
          */
-        timeStart = System.nanoTime();
-        arrList.add(999);
-        timeStop = System.nanoTime();
-        System.out.println("Время добавления элемента в ArrayList " + (timeStop - timeStart) + " наносекунд.");
+        SimpleQueue simpleQueue = new SimpleQueue(10);
+        startTime = System.nanoTime();
+        simpleQueue.insert(new MyClass("Bob"));
+        endTime = System.nanoTime();
+        simpleQueue.insert(new MyClass("Alice"));
 
-        timeStart = System.nanoTime();
-        System.out.println(arrList.get(500));
-        timeStop = System.nanoTime();
-        System.out.println("Время получения элемента из ArrayList " + (timeStop - timeStart) + " наносекунд.");
+        System.out.println("Время на добавление элемента в очередь: " + (endTime - startTime));
 
-        timeStart = System.nanoTime();
-        arrList.remove(500);
-        timeStop = System.nanoTime();
-        System.out.println("Время удаления элемента из ArrayList " + (timeStop - timeStart) + " наносекунд.");
+        System.out.println(simpleQueue.remove().toString());
 
         /*
-        Задание 3.3
-        Реализуйте простой односвязный список и его базовые методы.
+        Задание 4.3
+        На основе данных объектного списка из задания 3.4 реализуйте простой дек и его базовые методы.
+        Оцените время выполнения операций с помощью базового метода System.nanoTime().
          */
-        ListSimpleLinked listSimpleLinked = new ListSimpleLinked();
-        listSimpleLinked.addFront("A");
-        listSimpleLinked.addBack(2);
-        listSimpleLinked.printList();
-        listSimpleLinked.removeElemenet(2);
-        listSimpleLinked.removeElemenet("A");
-        listSimpleLinked.printList();
+        SimpleDeque simpleDeque = new SimpleDeque(3);
+        startTime = System.nanoTime();
+        simpleDeque.putFront(new MyClass("Alex-1"));
+        endTime = System.nanoTime();
+        System.out.println("Время на добавление элемента в дек: " + (endTime - startTime));
+        simpleDeque.putBack(new MyClass("Alex-2"));
+        System.out.println(simpleDeque.pollFront().toString());
+        System.out.println(simpleDeque.getSize());
+        simpleDeque.putBack(new MyClass("Alex-3"));
+        simpleDeque.putBack(new MyClass("Alex-4"));
+        System.out.println(simpleDeque.getSize());
+        System.out.println(simpleDeque.pollFront().toString());
 
         /*
-        Задание 3.4
-        На основе списка из задания 3.1 (наверное, все же 3.3?) реализуйте простой двусторонний список и
-        его базовые методы.
-        Реализуйте список заполненный объектами из вашего класса из задания 1.3
-        */
-        System.out.println("\nДвусторонний список:");
-        ListLinked listLinked = new ListLinked();
-        listLinked.addFront(new MyClass("Alex"));
-        listLinked.addFront(new MyClass("Bob"));
-
-        listLinked.printList();
-        System.out.println();
-        listLinked.printReversedList();
-
-        /*
-        Задание 3.5
-        Реализуйте итератор на основе связанных списков из задания 3.4 и выполните базовые операции итератора.
-        Оцените время выполнения операций с помощью базового метода System.nanoTime()
+        Задание 4.4
+        Реализуйте приоритетную очередь на основе ссылочных типов данных, например, integer.
+        Оцените время выполнения операций с помощью базового метода System.nanoTime().
          */
-        LinkedList<MyClass> linkedList = new LinkedList<>();
-        linkedList.add(new MyClass("Alex"));
-        linkedList.add(new MyClass("Bob"));
-        linkedList.add(new MyClass("Alice"));
-        Iterator iterator = linkedList.iterator();
-
-        System.out.println();
-
-        timeStart = System.nanoTime();
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next().toString());
-            iterator.remove();
-        }
-        timeStop = System.nanoTime();
-        System.out.println("Время на перебор и удаление элементов итератором " + (timeStop - timeStart) + " наносекунд.");
-
-        System.out.println("Теперь список такой: " + linkedList.toString());
-
+        PriorityQueue priorityQueue = new PriorityQueue(10);
+        priorityQueue.addElement(99);
+        priorityQueue.addElement(4);
+        priorityQueue.addElement(15);
+        priorityQueue.addElement(101);
+        System.out.println(priorityQueue.pollElement());
     }
 
     private static void fillArray(int[] arr) {
@@ -104,19 +77,6 @@ public class Main {
         }
     }
 
-    static class MyClass {
-        private String name;
-
-        public MyClass(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return "myClass name is " + name + '.';
-        }
-
-    }
 }
 
 
