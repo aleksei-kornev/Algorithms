@@ -1,5 +1,6 @@
 package ru.geekbrains;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main {
@@ -8,66 +9,151 @@ public class Main {
         long startTime;
         long endTime;
         /*
-        Задание 4.1
-        На основе данных объектного списка из задания 3.4 реализуйте простой стек и его базовые методы.
-        Оцените время выполнения операций с помощью базового метода System.nanoTime().
+        Задание 5.1
+        Приведите пример использования рекурсии.
+
+        Простой прмер рекурсии из жизни - это вложенные матрешки.
         */
-        SimpleStack simpleStack = new SimpleStack(10);
-
-        startTime = System.nanoTime();
-        simpleStack.addElement(new MyClass("Bob"));
-        endTime = System.nanoTime();
-        simpleStack.addElement(new MyClass("Alice"));
-
-        System.out.println("Время на добавление элемента в стек: " + (endTime - startTime));
-
-        System.out.println(simpleStack.pollElement().toString());
 
         /*
-        Задание 4.2
-        На основе данных объектного списка из задания 3.4 реализуйте простую очередь и его базовые методы.
-        Реализуйте вспомогательные методы.
-        Оцените время выполнения операций с помощью базового метода System.nanoTime().
+        Задание 5.2
+        Реализуйте простой пример бесконечной рекурсии и обычной рекурсии с условием для выхода.
          */
-        SimpleQueue simpleQueue = new SimpleQueue(10);
-        startTime = System.nanoTime();
-        simpleQueue.insert(new MyClass("Bob"));
-        endTime = System.nanoTime();
-        simpleQueue.insert(new MyClass("Alice"));
 
-        System.out.println("Время на добавление элемента в очередь: " + (endTime - startTime));
+        //бесконечная рекурсия
+        //simpleInfinityRecurtion(10);
 
-        System.out.println(simpleQueue.remove().toString());
+        //стандартная рекурсия
+        simpleStandartRecurtion(10);
 
         /*
-        Задание 4.3
-        На основе данных объектного списка из задания 3.4 реализуйте простой дек и его базовые методы.
-        Оцените время выполнения операций с помощью базового метода System.nanoTime().
+        Задание 5.3
+        Приведите пример изображающий стек вызова и стек вызова с рекурсией.
+        Стопка любых связанных предметов.
+
+        Стек вызовов с рекурсией - стопка из вложенных коробок: открываем большую коробку,
+        видим в ней такую же коробку меньшего размера, вытаскиваем, кладем сверху, открываем ее -
+        видим следующую коробку, вытаскиваем, кладем своерху, открываем ее, и так пока не дойдем до
+        последней коробки. Получившаяся стопка - это стек.
          */
-        SimpleDeque simpleDeque = new SimpleDeque(3);
-        startTime = System.nanoTime();
-        simpleDeque.putFront(new MyClass("Alex-1"));
-        endTime = System.nanoTime();
-        System.out.println("Время на добавление элемента в дек: " + (endTime - startTime));
-        simpleDeque.putBack(new MyClass("Alex-2"));
-        System.out.println(simpleDeque.pollFront().toString());
-        System.out.println(simpleDeque.getSize());
-        simpleDeque.putBack(new MyClass("Alex-3"));
-        simpleDeque.putBack(new MyClass("Alex-4"));
-        System.out.println(simpleDeque.getSize());
-        System.out.println(simpleDeque.pollFront().toString());
 
         /*
-        Задание 4.4
-        Реализуйте приоритетную очередь на основе ссылочных типов данных, например, integer.
-        Оцените время выполнения операций с помощью базового метода System.nanoTime().
+        Задание 5.4
+        Реализуйте простой алгоритм использующий цикл и простой алгоритм использующий рекурсию.
+        Оцените два алгоритма с помощью базового метода System.nanoTime().
          */
-        PriorityQueue priorityQueue = new PriorityQueue(10);
-        priorityQueue.addElement(99);
-        priorityQueue.addElement(4);
-        priorityQueue.addElement(15);
-        priorityQueue.addElement(101);
-        System.out.println(priorityQueue.pollElement());
+
+        //простой цикл
+        startTime = System.nanoTime();
+        simpleCycle(100);
+        endTime = System.nanoTime();
+        System.out.println("\n Время при простом цикле: " + (endTime - startTime));
+
+        //стандартная рекурсия
+        startTime = System.nanoTime();
+        simpleStandartRecurtion(100);
+        endTime = System.nanoTime();
+        System.out.println("\n Время при рекурсии: " + (endTime - startTime));
+
+        /*
+        Задание 5.5
+        Реализуйте алгоритм двоичного рекурсивного поиска на основе массива из задания 2.1.
+        Оцените алгоритм двоичного рекурсивного поиска с помощью базового метода System.nanoTime() и сравните с обычным двоичным поиском.
+        */
+        int[] simpleTypeArray = new int[500];
+        fillArray(simpleTypeArray);
+        Arrays.sort(simpleTypeArray);
+
+        System.out.println(Arrays.toString(simpleTypeArray));
+        System.out.println(simpleTypeArray[3]);
+        startTime = System.nanoTime();
+        System.out.println(binarySearchRecurtion(simpleTypeArray[3],simpleTypeArray));
+        endTime = System.nanoTime();
+        System.out.println("Время рекурсивного двоичного поиска: " + (endTime - startTime));
+
+        /*
+        Задание 5.6
+        На основе массива из задания 2.1 реализуйте алгоритм сортировки слиянием.
+        Оцените алгоритм сортировки слиянием с помощью базового метода System.nanoTime() и сравните с сортировкой методом sort().
+         */
+        int[] simpleTypeArrayTwo = new int[500];
+        fillArray(simpleTypeArrayTwo);
+        int[] simpleTypeArrayTwoCopy = new int[simpleTypeArrayTwo.length];
+        simpleTypeArrayTwoCopy = Arrays.copyOf(simpleTypeArrayTwo,simpleTypeArrayTwo.length);
+
+        startTime = System.nanoTime();
+        Arrays.sort(simpleTypeArrayTwo);
+        endTime = System.nanoTime();
+        System.out.println("Время встроенной сортировки: " + (endTime - startTime));
+
+        startTime = System.nanoTime();
+        simpleTypeArrayTwoCopy = mergeSort(simpleTypeArrayTwoCopy);
+        endTime = System.nanoTime();
+        System.out.println("Время сортировки слиянием: " + (endTime - startTime));
+    }
+
+    public static int[] mergeSort(int[] array1) {
+        int[] buffer1 = Arrays.copyOf(array1, array1.length);
+        int[] buffer2 = new int[array1.length];
+        int[] result = mergeSortInner(buffer1, buffer2, 0, array1.length);
+        return result;
+    }
+
+    public static int[] mergeSortInner(int[] buffer1, int[] buffer2,
+                                       int startIndex, int endIndex) {
+        if (startIndex >= endIndex - 1) {
+            return buffer1;
+        }
+
+        // уже отсортирован
+        int middle = startIndex + (endIndex - startIndex) / 2;
+        int[] sorted1 = mergeSortInner(buffer1, buffer2, startIndex, middle);
+        int[] sorted2 = mergeSortInner(buffer1, buffer2, middle, endIndex);
+
+        // Слияние
+        int index1 = startIndex;
+        int index2 = middle;
+        int destIndex = startIndex;
+        int[] result = sorted1 == buffer1 ? buffer2 : buffer1;
+        while (index1 < middle && index2 < endIndex) {
+            result[destIndex++] = sorted1[index1] < sorted2[index2]
+                    ? sorted1[index1++] : sorted2[index2++];
+        }
+        while (index1 < middle) {
+            result[destIndex++] = sorted1[index1++];
+        }
+        while (index2 < endIndex) {
+            result[destIndex++] = sorted2[index2++];
+        }
+        return result;
+    }
+
+
+    //Двоичный поиск с использованием рекурсии, возвращающий индекс найденного элемента или 0.
+    private static int binarySearchRecurtion (int search, int[] arr) {
+        if (arr.length == 0) return -1;
+
+        int halfPoint = (arr.length / 2);
+
+        if (search > arr[halfPoint]) return halfPoint + 1 + binarySearchRecurtion(search, Arrays.copyOfRange(arr,halfPoint+1, arr.length));
+        else if (search < arr[halfPoint]) return binarySearchRecurtion(search,Arrays.copyOfRange(arr,0,halfPoint-1));
+        else return (halfPoint);
+    }
+
+    private static void simpleCycle (int n) {
+        for (int i = 0; i < n; i++) {
+            System.out.print(n);
+        }
+    }
+
+    private static void simpleInfinityRecurtion (int n){
+        System.out.println(n);
+        simpleInfinityRecurtion(n-1);
+    }
+
+    private static void simpleStandartRecurtion (int n){
+        System.out.print(n);
+        if (n>0) simpleStandartRecurtion(n-1);
     }
 
     private static void fillArray(int[] arr) {
