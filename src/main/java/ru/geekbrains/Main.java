@@ -9,151 +9,280 @@ public class Main {
         long startTime;
         long endTime;
         /*
-        Задание 5.1
-        Приведите пример использования рекурсии.
+        Задание 6.1
+        Приведите пример использования древовидной структуры.
 
-        Простой прмер рекурсии из жизни - это вложенные матрешки.
+        Ответ: организационная структура предприятия.
+
+        Задание 6.2
+        Реализуйте класс узла дерева и базовый шаблон дерева с базовыми методами.
+        Задание 6.3
+        Реализуйте методы поиска и вставки узла в дерево.
+        Задание 6.4
+        Реализуйте базовые методы обхода дерева и метода дисплей.
+        Реализуйте поиск максимума и минимума.
+        Задание 6.5
+        Реализуйте метод удаления узла и выполните оценку времени базовых методов дерева с помощью System.nanoTime().
+        Задание 6.6
+        Реализуйте на основе массива из задания 2.1 алгоритм пирамидальной сортировки с реализацией бинарной пирамиды.
+        Выполните оценку алгоритма пирамидальной сортировки с помощью System.nanoTime() и сравните с предыдущими алгоритмами сортировки.
+
+        Задание 6.7
+        Приведите пример сбалансированного дерева и его применения.
+
+        Ответ: сбалансированное дерево - это полное дерево, имеющее ветви примерно равной длины.
+        Сбалансированные деревья идеально подходят для быстрого поиска значений.
         */
 
-        /*
-        Задание 5.2
-        Реализуйте простой пример бесконечной рекурсии и обычной рекурсии с условием для выхода.
-         */
+        Tree theTree = new Tree();
 
-        //бесконечная рекурсия
-        //simpleInfinityRecurtion(10);
+        theTree.insert(new MyClass("Bob",3));
+        theTree.insert(new MyClass("Alice",2));
+        theTree.insert(new MyClass("John",1));
+        theTree.insert(new MyClass("Smith",5));
 
-        //стандартная рекурсия
-        simpleStandartRecurtion(10);
-
-        /*
-        Задание 5.3
-        Приведите пример изображающий стек вызова и стек вызова с рекурсией.
-        Стопка любых связанных предметов.
-
-        Стек вызовов с рекурсией - стопка из вложенных коробок: открываем большую коробку,
-        видим в ней такую же коробку меньшего размера, вытаскиваем, кладем сверху, открываем ее -
-        видим следующую коробку, вытаскиваем, кладем своерху, открываем ее, и так пока не дойдем до
-        последней коробки. Получившаяся стопка - это стек.
-         */
-
-        /*
-        Задание 5.4
-        Реализуйте простой алгоритм использующий цикл и простой алгоритм использующий рекурсию.
-        Оцените два алгоритма с помощью базового метода System.nanoTime().
-         */
-
-        //простой цикл
         startTime = System.nanoTime();
-        simpleCycle(100);
+        theTree.max().display();
         endTime = System.nanoTime();
-        System.out.println("\n Время при простом цикле: " + (endTime - startTime));
+        theTree.min().display();
+        System.out.println("Время поиска мин/макс: " + (endTime - startTime));
 
-        //стандартная рекурсия
         startTime = System.nanoTime();
-        simpleStandartRecurtion(100);
+        theTree.find(2).display();
         endTime = System.nanoTime();
-        System.out.println("\n Время при рекурсии: " + (endTime - startTime));
+        System.out.println("Время поиска конкретного элемента: " + (endTime - startTime));
 
-        /*
-        Задание 5.5
-        Реализуйте алгоритм двоичного рекурсивного поиска на основе массива из задания 2.1.
-        Оцените алгоритм двоичного рекурсивного поиска с помощью базового метода System.nanoTime() и сравните с обычным двоичным поиском.
-        */
+        startTime = System.nanoTime();
+        theTree.delete(1);
+        endTime = System.nanoTime();
+        System.out.println("Время удаления элемента: " + (endTime - startTime));
+        System.out.println();
+        theTree.displayTree();
+
+
         int[] simpleTypeArray = new int[500];
         fillArray(simpleTypeArray);
-        Arrays.sort(simpleTypeArray);
-
+        startTime = System.nanoTime();
+        heapSort(simpleTypeArray,simpleTypeArray.length);
+        endTime = System.nanoTime();
         System.out.println(Arrays.toString(simpleTypeArray));
-        System.out.println(simpleTypeArray[3]);
-        startTime = System.nanoTime();
-        System.out.println(binarySearchRecurtion(simpleTypeArray[3],simpleTypeArray));
-        endTime = System.nanoTime();
-        System.out.println("Время рекурсивного двоичного поиска: " + (endTime - startTime));
+        System.out.println("Время сортировки: " + (endTime - startTime));
 
-        /*
-        Задание 5.6
-        На основе массива из задания 2.1 реализуйте алгоритм сортировки слиянием.
-        Оцените алгоритм сортировки слиянием с помощью базового метода System.nanoTime() и сравните с сортировкой методом sort().
-         */
-        int[] simpleTypeArrayTwo = new int[500];
-        fillArray(simpleTypeArrayTwo);
-        int[] simpleTypeArrayTwoCopy = new int[simpleTypeArrayTwo.length];
-        simpleTypeArrayTwoCopy = Arrays.copyOf(simpleTypeArrayTwo,simpleTypeArrayTwo.length);
-
-        startTime = System.nanoTime();
-        Arrays.sort(simpleTypeArrayTwo);
-        endTime = System.nanoTime();
-        System.out.println("Время встроенной сортировки: " + (endTime - startTime));
-
-        startTime = System.nanoTime();
-        simpleTypeArrayTwoCopy = mergeSort(simpleTypeArrayTwoCopy);
-        endTime = System.nanoTime();
-        System.out.println("Время сортировки слиянием: " + (endTime - startTime));
     }
 
-    public static int[] mergeSort(int[] array1) {
-        int[] buffer1 = Arrays.copyOf(array1, array1.length);
-        int[] buffer2 = new int[array1.length];
-        int[] result = mergeSortInner(buffer1, buffer2, 0, array1.length);
-        return result;
-    }
-
-    public static int[] mergeSortInner(int[] buffer1, int[] buffer2,
-                                       int startIndex, int endIndex) {
-        if (startIndex >= endIndex - 1) {
-            return buffer1;
-        }
-
-        // уже отсортирован
-        int middle = startIndex + (endIndex - startIndex) / 2;
-        int[] sorted1 = mergeSortInner(buffer1, buffer2, startIndex, middle);
-        int[] sorted2 = mergeSortInner(buffer1, buffer2, middle, endIndex);
-
-        // Слияние
-        int index1 = startIndex;
-        int index2 = middle;
-        int destIndex = startIndex;
-        int[] result = sorted1 == buffer1 ? buffer2 : buffer1;
-        while (index1 < middle && index2 < endIndex) {
-            result[destIndex++] = sorted1[index1] < sorted2[index2]
-                    ? sorted1[index1++] : sorted2[index2++];
-        }
-        while (index1 < middle) {
-            result[destIndex++] = sorted1[index1++];
-        }
-        while (index2 < endIndex) {
-            result[destIndex++] = sorted2[index2++];
-        }
-        return result;
-    }
-
-
-    //Двоичный поиск с использованием рекурсии, возвращающий индекс найденного элемента или 0.
-    private static int binarySearchRecurtion (int search, int[] arr) {
-        if (arr.length == 0) return -1;
-
-        int halfPoint = (arr.length / 2);
-
-        if (search > arr[halfPoint]) return halfPoint + 1 + binarySearchRecurtion(search, Arrays.copyOfRange(arr,halfPoint+1, arr.length));
-        else if (search < arr[halfPoint]) return binarySearchRecurtion(search,Arrays.copyOfRange(arr,0,halfPoint-1));
-        else return (halfPoint);
-    }
-
-    private static void simpleCycle (int n) {
-        for (int i = 0; i < n; i++) {
-            System.out.print(n);
+    public static void heapSort(int[] myArray, int length) {
+        int temp;
+        int size = length-1;
+        for (int i = (length / 2); i >= 0; i--) {
+            heapify(myArray, i, size);
+        };
+        for(int i= size; i>=0; i--) {
+            temp = myArray[0];
+            myArray[0] = myArray[size];
+            myArray[size] = temp;
+            size--;
+            heapify(myArray, 0, size);
         }
     }
 
-    private static void simpleInfinityRecurtion (int n){
-        System.out.println(n);
-        simpleInfinityRecurtion(n-1);
+    public static void heapify (int [] myArray, int i, int heapSize) {
+        int a = 2*i;
+        int b = 2*i+1;
+        int largestElement;
+        if (a<= heapSize && myArray[a] > myArray[i]) {
+            largestElement = a;
+        } else {
+            largestElement = i;
+        }
+        if (b <= heapSize && myArray[b] > myArray[largestElement]) {
+            largestElement = b;
+        }
+        if (largestElement != i) {
+            int temp = myArray[i];
+            myArray[i] = myArray[largestElement];
+            myArray[largestElement] = temp;
+            heapify(myArray, largestElement, heapSize);
+        }
     }
 
-    private static void simpleStandartRecurtion (int n){
-        System.out.print(n);
-        if (n>0) simpleStandartRecurtion(n-1);
+    static class Tree {
+        private Node root;
+
+        public void insert (MyClass myClass) {
+            Node node = new Node();
+            node.myClass = myClass;
+            if (root == null)
+                root = node;
+            else {
+                Node current = root;
+                Node parent;
+                while (true) {
+                    parent = current;
+                    if (myClass.id < current.myClass.id){
+                        current = current.leftChild;
+                        if (current == null) {
+                            parent.leftChild = node;
+                            return;
+                        }
+                    } else {
+                        current = current.rightChild;
+                        if (current == null) {
+                            parent.rightChild = node;
+                            return;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public Node find (int key) {
+            Node current = root;
+            while (current.myClass.id != key) {
+                if (key < current.myClass.id)
+                    current = current.leftChild;
+                else
+                    current = current.rightChild;
+                if (current == null)
+                    return null;
+            }
+            return current;
+        }
+
+        public void inOrder (Node rootNode) {
+            if (rootNode != null) {
+                inOrder(rootNode.leftChild);
+                rootNode.display();
+                inOrder(rootNode.rightChild);
+            }
+        }
+
+        public Node min () {
+            Node current, last = null;
+            current = root;
+            while (current != null) {
+                last = current;
+                current = current.leftChild;
+            }
+            return last;
+        }
+
+        public Node max () {
+            Node current, last = null;
+            current = root;
+            while (current != null) {
+                last = current;
+                current = current.rightChild;
+            }
+            return last;
+        }
+
+        public boolean delete (int id) {
+            Node current = root;
+            Node parent = root;
+
+            boolean isLeftChild = true;
+
+            while (current.myClass.id != id) {
+                parent = current;
+                if (id < current.myClass.id) {
+                    isLeftChild = true;
+                    current = current.leftChild;
+                } else {
+                    isLeftChild = false;
+                    current = current.rightChild;
+                }
+                if (current == null) {
+                    return false;
+                }
+            }
+
+            if (current.leftChild == null && current.rightChild == null) {
+                if (current == root) {
+                    root = null;
+                } else if (isLeftChild) {
+                    parent.leftChild = null;
+                } else {
+                    parent.rightChild = null;
+                }
+            } else if (current.rightChild == null) {
+                if (current == null) {
+                    root = current.leftChild;
+                } else if (isLeftChild) {
+                    parent.leftChild = current.leftChild;
+                } else {
+                    parent.rightChild = current.leftChild;
+                }
+            } else if (current.leftChild == null) {
+                if (current == null) {
+                    root = current.rightChild;
+                } else if (isLeftChild) {
+                    parent.leftChild = current.rightChild;
+                } else {
+                    parent.rightChild = current.rightChild;
+                }
+            } else {
+                Node successor = getSuccessor(current);
+                if (current == root) {
+                    root = successor;
+                } else if (isLeftChild) {
+                    parent.leftChild = successor;
+                } else {
+                    parent.rightChild = successor;
+                }
+                successor.leftChild = current.leftChild;
+            }
+            return true;
+        }
+
+        public Node getSuccessor(Node node){
+            Node successorParent = node;
+            Node successor = node;
+            Node current = node.rightChild;
+
+            while (current != null) {
+                successorParent = successor;
+                successor = current;
+                current = current.leftChild;
+            }
+            if (successor != node.rightChild) {
+                successorParent.leftChild = successor.rightChild;
+                successor.rightChild = node.rightChild;
+            }
+            return successor;
+        }
+
+        public void displayTree () {
+            Node current = root;
+            System.out.println("Симметричный");
+            inOrder(root);
+
+        }
+    }
+
+    static class Node {
+        public MyClass myClass;
+        public Node leftChild;
+        public Node rightChild;
+
+        public void display () {
+            System.out.println(myClass.toString());
+        }
+    }
+
+    static class MyClass {
+        private String name;
+        private int id;
+
+        public MyClass(String name, int id) {
+            this.name = name;
+            this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "ID: "+id+" Name is " + name + '.';
+        }
     }
 
     private static void fillArray(int[] arr) {
