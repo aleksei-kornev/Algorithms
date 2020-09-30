@@ -1,6 +1,5 @@
 package ru.geekbrains;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main {
@@ -9,159 +8,211 @@ public class Main {
         long startTime;
         long endTime;
         /*
-        Задание 7.1
-        Приведите пример графа.
+        Задание 8.1
+        Приведите пример использование хеш-таблиц.
 
-        Ответ: поиск кратчайшего маршрута между городами; поиск наиболее дешевого перелета между двумя городами;
-        в целом любые схемы авиалиний; блок-схема;
+        Самый распространенный пример - хранение паролей пользователя с помощью хешей.
 
-        Задание 7.2
-        Реализуйте базовые методы графа.
-        Задание 7.3
-        В программный код из задания 7.2 добавьте реализацию метода обхода в глубину.
-        Выполните оценку времени с помощью System.nanoTime().
-        Задание 7.4
-        В базовом графе из задания 7.2 реализуйте метод обхода в ширину.
-        Выполните оценку времени с помощью System.nanoTime().
+        Задание 8.2
+        Приведите примеры ключей и коллизий.
+
+        Ключ - любое значение, для которого вычисляется хеш. Например, ID пользователя.
+        Коллизия - ситуация, когда получается одинаковый хеш-код для разных ключей.
+
+        Задание 8.3
+        Приведите примеры популярных и эффективных хеш-функций.
+
+        Популярной и эффективной хеш-функцией является алгоритм хеширования MD5. Этот алгоритм
+        используется для проверки целостности файлов или поиска дубликатов. Раньше активно использовался
+        для хранения паролей, но потом были выявлены уязвимости, из-за которых сейчас все меньше примерняется
+        для этих целей.
+
+        Вообще хорошей хеш-функцией является такая, которая быстро вычисляется и имеет минимум коллизий.
+
+        Таковой можно считать функцию хеширования текстового значения, когда каждой букве присваивается
+        значение, после чего все значения складываются.
+
+        Задание 8.4
+        На основе данных массива из задания 2.3 реализуйте хеш-таблицу с помощью открытой адресации,
+        а конкретнее метода линейного пробирования
+
+        Задание 8.5
+        Перестройте программный код задания 8.4 из алгоритма линейного пробирования в алгоритм двойного хеширования.
+        Сравните отличительные черты двух алгоритмов.
         */
 
-        Graph graph = new Graph(100);
 
-        graph.insertVertex("A");
-        graph.insertVertex("B");
-        graph.insertVertex("C");
-        graph.insertVertex("D");
-        graph.insertVertex("E");
-        graph.insertVertex("F");
+        Item aDataItem;
+        int aKey;
+        int size = 50;
 
-        graph.insertEdge(0, 1);
-        graph.insertEdge(0, 2);
-        graph.insertEdge(1, 3);
-        graph.insertEdge(2, 4);
-        graph.insertEdge(2, 5);
+        // Для задания 8.4
+        HashTableLinear hTable = new HashTableLinear(size);
+        // Для задания 8.5
+        HashTableDoubleHash hTableDH = new HashTableDoubleHash(size);
 
-        startTime = System.nanoTime();
-        graph.dfs(0);
-        endTime = System.nanoTime();
-        System.out.println("Время обхода в глубину: " + (endTime - startTime));
-        System.out.println();
+        Random rand = new Random();
 
-        startTime = System.nanoTime();
-        graph.bfs(0);
-        endTime = System.nanoTime();
-        System.out.println();
-        System.out.println("Время обхода в ширину: " + (endTime - startTime));
+        for (int i = 0; i < 15; i++) {
+            aKey = rand.nextInt(999);
+            aDataItem = new Item(aKey);
+            hTable.insert(aDataItem);
+            hTableDH.insert(aDataItem);
+        }
+
+        System.out.println("Вывод таблицы с методом линейной пробации:");
+        hTable.display();
+        System.out.println("Вывод таблицы с двойным хешированием:");
+        hTableDH.display();
     }
 
+    static class Item {
+        private int data;
 
-    static class Vertex{
-
-        private String label;
-        private boolean isVisited;
-
-        public Vertex(String label) {
-            this.label = label;
-            this.isVisited = false;
+        public Item(int data) {
+            this.data = data;
         }
 
-        public String getLabel() {
-            return label;
-        }
-
-        public boolean isVisited() {
-            return isVisited;
-        }
-
-        public void setVisited(boolean visited) {
-            isVisited = visited;
+        public int getKey() {
+            return data;
         }
     }
 
-    public static class Graph {
+    static class HashTableLinear {
+        private Item[] hashArr;
+        private int arrSize;
+        private Item nonItem;
 
-        //массив для хранения вершин
-        private Vertex[] vertexArray;
-        //матрица смежности
-        private int[][] matrix;
-        //текущее количество вершин
-        private int count;
-        private Stack stack;
-
-        public Graph(int n) {
-            stack = new Stack();
-            vertexArray = new Vertex[n];
-            matrix = new int[n][n];
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    matrix[i][j] = 0;
+        public HashTableLinear(int size) {
+            this.arrSize = size;
+            hashArr = new Item[arrSize];
+            nonItem = new Item(-1);
         }
 
-        public void insertVertex(String key)
-        {
-            Vertex v = new Vertex(key);
-            vertexArray[count++] = v;
-        }
-
-        public void insertEdge(int begin, int end)
-        {
-            matrix[begin][end] = 1;
-            matrix[end][begin] = 1;
-        }
-
-        //получение смежной непосещенной вершины
-        private int getUnvisitedVertex(int vertex)
-        {
-            for(int i = 0; i < count; i++)
-                if(matrix[vertex][i] == 1 && vertexArray[i].isVisited == false)
-                    return i;
-
-            return -1;
-        }
-
-        //реализация обхода в глубину
-        public void dfs(int v)
-        {
-            System.out.print("Выполняем обход в глубину: " + vertexArray[v].getLabel() + " -> ");
-            vertexArray[v].isVisited = true;
-            stack.push(v);
-            while(!stack.isEmpty())
-            {
-                int adjVertex = getUnvisitedVertex((int) stack.peek());
-                if(adjVertex == -1)
-                    stack.pop();
-                else{
-                    vertexArray[adjVertex].isVisited = true;
-                    System.out.print(vertexArray[adjVertex].getLabel() + " -> ");
-                    stack.push(adjVertex);
+        public void display() {
+            for (int i = 0; i < arrSize; i++) {
+                if (hashArr[i] != null) {
+                    System.out.println(hashArr[i].getKey());
+                } else {
+                    System.out.println("***");
                 }
-            }
 
-            System.out.println();
-            for(Vertex vertex: vertexArray)
-                if (vertex != null)
-                    vertex.setVisited(false);
-        }
-
-        //реализация обхода в ширину
-        public void bfs(int v)
-        {
-            System.out.print("Выполняем обход в ширину: " + vertexArray[v].getLabel() + " -> ");
-            vertexArray[v].isVisited = true;
-            int vertex;
-            Queue<Integer> queue = new LinkedList<>();
-            queue.add(v);
-            while(!queue.isEmpty())
-            {
-                int currentVertex = queue.remove();
-
-                while((vertex = getUnvisitedVertex(currentVertex)) != -1)
-                {
-                    vertexArray[vertex].setVisited(true);
-                    System.out.print(vertexArray[vertex].getLabel() + " -> ");
-                    queue.add(vertex);
-                }
             }
         }
+
+        public int hashFunc(int key) {
+            return key % arrSize;
+        }
+
+        public void insert(Item item) {
+            int key = item.getKey();
+            int hashVal = hashFunc(key);
+            while (hashArr[hashVal] != null && hashArr[hashVal].getKey() != -1) {
+                ++hashVal;
+                hashVal %= arrSize;
+            }
+
+            hashArr[hashVal] = item;
+        }
+
+        public Item delete(int key) {
+            int hashVal = hashFunc(key);
+            while (hashArr[hashVal] != null) {
+                if (hashArr[hashVal].getKey() == key) {
+                    Item temp = hashArr[hashVal];
+                    hashArr[hashVal] = nonItem;
+                    return temp;
+                }
+                ++hashVal;
+                hashVal %= arrSize;
+            }
+            return null;
+        }
+
+        public Item find(int key) {
+            int hashVal = hashFunc(key);
+            while (hashArr[hashVal] != null) {
+                if (hashArr[hashVal].getKey() == key) {
+                    return hashArr[hashVal];
+                }
+                ++hashVal;
+                hashVal %= arrSize;
+            }
+            return null;
+        }
+
+    }
+
+    static class HashTableDoubleHash {
+        private Item[] hashArr;
+        private int arrSize;
+        private Item nonItem;
+
+        public HashTableDoubleHash(int size) {
+            this.arrSize = size;
+            hashArr = new Item[arrSize];
+            nonItem = new Item(-1);
+        }
+
+        public void display() {
+            for (int i = 0; i < arrSize; i++) {
+                if (hashArr[i] != null) {
+                    System.out.println(hashArr[i].getKey());
+                } else {
+                    System.out.println("***");
+                }
+
+            }
+        }
+
+        public int hashFunc(int key) {
+            return key % arrSize;
+        }
+
+        public int hashFuncDouble(int key) {
+            return 5 - key % 5;
+        }
+
+        public void insert(Item item) {
+            int key = item.getKey();
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal] != null && hashArr[hashVal].getKey() != -1) {
+                hashVal += stepSize;
+                hashVal %= arrSize;
+            }
+
+            hashArr[hashVal] = item;
+        }
+
+        public Item delete(int key) {
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal] != null) {
+                if (hashArr[hashVal].getKey() == key) {
+                    Item temp = hashArr[hashVal];
+                    hashArr[hashVal] = nonItem;
+                    return temp;
+                }
+                hashVal += stepSize;
+                hashVal %= arrSize;
+            }
+            return null;
+        }
+
+        public Item find(int key) {
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal] != null) {
+                if (hashArr[hashVal].getKey() == key) {
+                    return hashArr[hashVal];
+                }
+                hashVal += stepSize;
+                hashVal %= arrSize;
+            }
+            return null;
+        }
+
     }
 
 }
